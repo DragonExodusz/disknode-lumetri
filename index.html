@@ -300,6 +300,16 @@
     .game-tags { display: flex; flex-wrap: wrap; gap: 9px; }
     .game-tags span { padding: 6px 11px; border: 1px solid rgba(103,231,165,.25); border-radius: 99px; color: #a4f5c7; font-size: .76rem; font-weight: 800; }
 
+    .app-ui-section { border-top: 1px solid var(--line); background: linear-gradient(180deg, rgba(12,20,36,.8), rgba(7,11,22,.96)); }
+    .app-ui-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin-top: 32px; }
+    .app-ui-card { min-width: 0; margin: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: rgba(13,22,40,.88); }
+    .app-ui-image { position: relative; display: block; overflow: hidden; aspect-ratio: 16 / 9; background: #0b1321; }
+    .app-ui-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .24s ease; }
+    .app-ui-image:hover img, .app-ui-image:focus-visible img { transform: scale(1.035); }
+    .app-ui-caption { display: flex; flex-direction: column; gap: 3px; padding: 13px 15px 15px; }
+    .app-ui-caption span { color: var(--cyan); font: 600 .68rem var(--display); letter-spacing: .13em; text-transform: uppercase; }
+    .app-ui-caption strong { font: 600 .96rem var(--display); }
+
     .workflow-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; margin-top: 34px; }
     .workflow-step { padding-top: 18px; border-top: 1px solid var(--line); }
     .workflow-step .step-number { color: var(--cyan); font: 700 1.2rem var(--display); }
@@ -371,6 +381,7 @@
       .hero-art { min-height: 350px; }
       .orbit { width: min(100%, 350px); }
       .feature-grid { grid-template-columns: repeat(2,1fr); }
+      .app-ui-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
       .pricing-layout { gap: 28px; }
     }
     @media (max-width: 700px) {
@@ -406,7 +417,7 @@
     }
     @media (max-width: 480px) {
       .container { width: calc(100% - 30px); }
-      .nav-links { gap: 16px; }
+      .nav-links { gap: 16px; font-size: .72rem; }
       .nav > .button { padding-inline: 11px; }
       .hero-actions .button { width: 100%; }
       .quick-facts { gap: 8px 14px; font-size: .73rem; }
@@ -418,6 +429,7 @@
       .proof-item { padding: 12px; }
       .proof-item + .proof-item { border-top: 1px solid var(--line); border-left: 0; }
       .feature-grid { grid-template-columns: 1fr; }
+      .app-ui-grid { grid-template-columns: 1fr; }
       .feature { min-height: 0; }
       .download-card { padding: 18px; }
       .compat-callout { align-items: flex-start; flex-direction: column; gap: 12px; }
@@ -441,6 +453,7 @@
         <a href="#downloads">Downloads</a>
         <a href="#platform">Platform</a>
         <a href="#compatibility">Compatibility</a>
+        <a href="#app-ui">App UI</a>
         <a href="#pricing">Pricing</a>
       </nav>
       <a class="button button-primary" href="#downloads">
@@ -601,10 +614,66 @@
             <span class="feature-icon" aria-hidden="true">↻</span>
             <div><h3>Built-in updater</h3><p>Keep DiskNode up to date from the platform.</p></div>
           </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true">GPU</span>
+            <div><h3>GPU Boost</h3><p>Adjust GPU Boost for client PCs from Client Manager.</p></div>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true">NIC</span>
+            <div><h3>Auto NIC</h3><p>Access Auto NIC from the Client Manager controls.</p></div>
+          </article>
         </div>
         <div class="compat-callout">
           <strong>Ready for popular competitive games</strong>
           <div class="game-tags"><span>VALORANT restrictions supported</span><span>Warzone supported</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-ui-section" id="app-ui">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Inside DiskNode</p>
+          <h2 class="display">A closer look at the app.</h2>
+          <p>Explore the DiskNode dashboard, client controls, image management, and server settings.</p>
+        </div>
+        <div class="app-ui-grid">
+          <figure class="app-ui-card">
+            <a class="app-ui-image" href="assets/app-ui/dashboard-overview.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode dashboard screenshot">
+              <img src="assets/app-ui/dashboard-overview.png" alt="DiskNode dashboard showing live network activity, disk usage, system resources, and client write-backs." loading="lazy" decoding="async">
+            </a>
+            <figcaption class="app-ui-caption"><span>Dashboard</span><strong>Server and disk overview</strong></figcaption>
+          </figure>
+          <figure class="app-ui-card">
+            <a class="app-ui-image" href="assets/app-ui/disk-manager.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode disk manager screenshot">
+              <img src="assets/app-ui/disk-manager.png" alt="DiskNode Disk Manager showing image, game disk, SSD cache, and write-back storage." loading="lazy" decoding="async">
+            </a>
+            <figcaption class="app-ui-caption"><span>Disk Manager</span><strong>Manage storage and caches</strong></figcaption>
+          </figure>
+          <figure class="app-ui-card">
+            <a class="app-ui-image" href="assets/app-ui/client-manager.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode client manager screenshot">
+              <img src="assets/app-ui/client-manager.png" alt="DiskNode Client Manager with client PC controls, GPU Boost, and Auto NIC." loading="lazy" decoding="async">
+            </a>
+            <figcaption class="app-ui-caption"><span>Client Manager</span><strong>Monitor PCs and gaming controls</strong></figcaption>
+          </figure>
+          <figure class="app-ui-card">
+            <a class="app-ui-image" href="assets/app-ui/image-manager-tweaks.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode image manager screenshot">
+              <img src="assets/app-ui/image-manager-tweaks.png" alt="DiskNode Image Manager with Windows image performance and gaming tweaks." loading="lazy" decoding="async">
+            </a>
+            <figcaption class="app-ui-caption"><span>Image Manager</span><strong>Built-in image optimizations</strong></figcaption>
+          </figure>
+          <figure class="app-ui-card">
+            <a class="app-ui-image" href="assets/app-ui/settings.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode settings screenshot">
+              <img src="assets/app-ui/settings.png" alt="DiskNode settings for boot, network, server, and driver configuration." loading="lazy" decoding="async">
+            </a>
+            <figcaption class="app-ui-caption"><span>Settings</span><strong>Configure your server</strong></figcaption>
+          </figure>
+          <figure class="app-ui-card">
+            <a class="app-ui-image" href="assets/app-ui/advanced-settings.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode advanced settings screenshot">
+              <img src="assets/app-ui/advanced-settings.png" alt="DiskNode advanced settings for RAM, caching, network boot, and write-back." loading="lazy" decoding="async">
+            </a>
+            <figcaption class="app-ui-caption"><span>Advanced Settings</span><strong>Fine-tune caching and boot</strong></figcaption>
+          </figure>
         </div>
       </div>
     </section>
