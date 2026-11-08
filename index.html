@@ -303,12 +303,44 @@
     .app-ui-section { border-top: 1px solid var(--line); background: linear-gradient(180deg, rgba(12,20,36,.8), rgba(7,11,22,.96)); }
     .app-ui-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin-top: 32px; }
     .app-ui-card { min-width: 0; margin: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: rgba(13,22,40,.88); }
-    .app-ui-image { position: relative; display: block; overflow: hidden; aspect-ratio: 16 / 9; background: #0b1321; }
-    .app-ui-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .24s ease; }
+    .app-ui-image { position: relative; display: block; width: 100%; padding: 0; overflow: hidden; border: 0; aspect-ratio: 16 / 9; background: #0b1321; cursor: zoom-in; }
+    .app-ui-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s cubic-bezier(.2,.7,.25,1); }
     .app-ui-image:hover img, .app-ui-image:focus-visible img { transform: scale(1.035); }
     .app-ui-caption { display: flex; flex-direction: column; gap: 3px; padding: 13px 15px 15px; }
     .app-ui-caption span { color: var(--cyan); font: 600 .68rem var(--display); letter-spacing: .13em; text-transform: uppercase; }
     .app-ui-caption strong { font: 600 .96rem var(--display); }
+    .image-lightbox {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+      margin: 0;
+      padding: 20px;
+      grid-template-rows: auto minmax(0,1fr) auto;
+      gap: 10px;
+      border: 0;
+      color: var(--text);
+      background: rgba(3,8,18,.97);
+      opacity: 0;
+      transform: scale(.96);
+      transition: opacity .24s ease, transform .32s cubic-bezier(.2,.7,.25,1), display .32s allow-discrete, overlay .32s allow-discrete;
+    }
+    .image-lightbox[open] { display: grid; opacity: 1; transform: scale(1); }
+    .image-lightbox::backdrop { background: rgba(3,8,18,0); backdrop-filter: blur(0); transition: background-color .28s ease, backdrop-filter .28s ease; }
+    .image-lightbox[open]::backdrop { background: rgba(3,8,18,.84); backdrop-filter: blur(8px); }
+    @starting-style {
+      .image-lightbox[open] { opacity: 0; transform: scale(.96); }
+      .image-lightbox[open]::backdrop { background: rgba(3,8,18,0); backdrop-filter: blur(0); }
+    }
+    .lightbox-toolbar { display: flex; justify-content: flex-end; }
+    .lightbox-close { width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--text); background: rgba(17,29,49,.92); font-size: 1.5rem; cursor: pointer; transition: transform .2s ease, border-color .2s ease; }
+    .lightbox-close:hover { transform: rotate(90deg); border-color: var(--cyan); }
+    .lightbox-close:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+    .lightbox-figure { min-width: 0; min-height: 0; display: grid; place-items: center; margin: 0; }
+    .lightbox-figure img { display: block; width: auto; height: auto; max-width: min(100%,1500px); max-height: calc(100dvh - 116px); object-fit: contain; border: 1px solid rgba(149,179,226,.2); border-radius: 10px; background: #0b1321; box-shadow: 0 24px 100px rgba(0,0,0,.55); }
+    .lightbox-caption { margin: 0; color: #c4d2e7; font-size: .85rem; text-align: center; }
 
     .workflow-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; margin-top: 34px; }
     .workflow-step { padding-top: 18px; border-top: 1px solid var(--line); }
@@ -432,6 +464,8 @@
       .app-ui-grid { grid-template-columns: 1fr; }
       .feature { min-height: 0; }
       .download-card { padding: 18px; }
+      .image-lightbox { padding: 12px; }
+      .lightbox-figure img { max-height: calc(100dvh - 96px); }
       .compat-callout { align-items: flex-start; flex-direction: column; gap: 12px; }
       .workflow-grid { grid-template-columns: 1fr 1fr; gap: 18px 13px; }
       .pricing-card { padding: 24px 20px; }
@@ -639,39 +673,39 @@
         </div>
         <div class="app-ui-grid">
           <figure class="app-ui-card">
-            <a class="app-ui-image" href="assets/app-ui/dashboard-overview.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode dashboard screenshot">
+            <button class="app-ui-image" type="button" data-lightbox="assets/app-ui/dashboard-overview.png" aria-label="Enlarge DiskNode dashboard screenshot">
               <img src="assets/app-ui/dashboard-overview.png" alt="DiskNode dashboard showing live network activity, disk usage, system resources, and client write-backs." loading="lazy" decoding="async">
-            </a>
+            </button>
             <figcaption class="app-ui-caption"><span>Dashboard</span><strong>Server and disk overview</strong></figcaption>
           </figure>
           <figure class="app-ui-card">
-            <a class="app-ui-image" href="assets/app-ui/disk-manager.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode disk manager screenshot">
+            <button class="app-ui-image" type="button" data-lightbox="assets/app-ui/disk-manager.png" aria-label="Enlarge DiskNode disk manager screenshot">
               <img src="assets/app-ui/disk-manager.png" alt="DiskNode Disk Manager showing image, game disk, SSD cache, and write-back storage." loading="lazy" decoding="async">
-            </a>
+            </button>
             <figcaption class="app-ui-caption"><span>Disk Manager</span><strong>Manage storage and caches</strong></figcaption>
           </figure>
           <figure class="app-ui-card">
-            <a class="app-ui-image" href="assets/app-ui/client-manager.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode client manager screenshot">
+            <button class="app-ui-image" type="button" data-lightbox="assets/app-ui/client-manager.png" aria-label="Enlarge DiskNode client manager screenshot">
               <img src="assets/app-ui/client-manager.png" alt="DiskNode Client Manager with client PC controls, GPU Boost, and Auto NIC." loading="lazy" decoding="async">
-            </a>
+            </button>
             <figcaption class="app-ui-caption"><span>Client Manager</span><strong>Monitor PCs and gaming controls</strong></figcaption>
           </figure>
           <figure class="app-ui-card">
-            <a class="app-ui-image" href="assets/app-ui/image-manager-tweaks.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode image manager screenshot">
+            <button class="app-ui-image" type="button" data-lightbox="assets/app-ui/image-manager-tweaks.png" aria-label="Enlarge DiskNode image manager screenshot">
               <img src="assets/app-ui/image-manager-tweaks.png" alt="DiskNode Image Manager with Windows image performance and gaming tweaks." loading="lazy" decoding="async">
-            </a>
+            </button>
             <figcaption class="app-ui-caption"><span>Image Manager</span><strong>Built-in image optimizations</strong></figcaption>
           </figure>
           <figure class="app-ui-card">
-            <a class="app-ui-image" href="assets/app-ui/settings.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode settings screenshot">
+            <button class="app-ui-image" type="button" data-lightbox="assets/app-ui/settings.png" aria-label="Enlarge DiskNode settings screenshot">
               <img src="assets/app-ui/settings.png" alt="DiskNode settings for boot, network, server, and driver configuration." loading="lazy" decoding="async">
-            </a>
+            </button>
             <figcaption class="app-ui-caption"><span>Settings</span><strong>Configure your server</strong></figcaption>
           </figure>
           <figure class="app-ui-card">
-            <a class="app-ui-image" href="assets/app-ui/advanced-settings.png" target="_blank" rel="noopener noreferrer" aria-label="View full-size DiskNode advanced settings screenshot">
+            <button class="app-ui-image" type="button" data-lightbox="assets/app-ui/advanced-settings.png" aria-label="Enlarge DiskNode advanced settings screenshot">
               <img src="assets/app-ui/advanced-settings.png" alt="DiskNode advanced settings for RAM, caching, network boot, and write-back." loading="lazy" decoding="async">
-            </a>
+            </button>
             <figcaption class="app-ui-caption"><span>Advanced Settings</span><strong>Fine-tune caching and boot</strong></figcaption>
           </figure>
         </div>
@@ -737,6 +771,16 @@
     </section>
   </main>
 
+  <dialog class="image-lightbox" aria-label="Full-size app screenshot">
+    <div class="lightbox-toolbar">
+      <button class="lightbox-close" type="button" aria-label="Close full-size image" autofocus>&times;</button>
+    </div>
+    <figure class="lightbox-figure">
+      <img alt="">
+    </figure>
+    <p class="lightbox-caption" aria-live="polite"></p>
+  </dialog>
+
   <footer>
     <div class="container footer-row">
       <span class="footer-brand">DiskNode <span class="gradient-text">by Lumetri</span></span>
@@ -747,5 +791,36 @@
       </nav>
     </div>
   </footer>
+  <script>
+    const appGallery = document.querySelector(".app-ui-grid");
+    const imageLightbox = document.querySelector(".image-lightbox");
+    const lightboxImage = imageLightbox.querySelector(".lightbox-figure img");
+    const lightboxCaption = imageLightbox.querySelector(".lightbox-caption");
+    const lightboxCloseButton = imageLightbox.querySelector(".lightbox-close");
+
+    appGallery.addEventListener("click", event => {
+      const trigger = event.target.closest("[data-lightbox]");
+      if (!trigger) return;
+
+      const thumbnail = trigger.querySelector("img");
+      const caption = trigger.closest(".app-ui-card").querySelector(".app-ui-caption");
+      lightboxImage.src = trigger.dataset.lightbox;
+      lightboxImage.alt = thumbnail.alt;
+      lightboxCaption.textContent = Array.from(caption.children, item => item.textContent).join(" — ");
+      imageLightbox.showModal();
+    });
+
+    lightboxCloseButton.addEventListener("click", () => imageLightbox.close());
+
+    imageLightbox.addEventListener("keydown", event => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      imageLightbox.close();
+    });
+
+    imageLightbox.addEventListener("click", event => {
+      if (event.target === imageLightbox) imageLightbox.close();
+    });
+  </script>
 </body>
 </html>
