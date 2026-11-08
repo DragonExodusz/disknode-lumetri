@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070b16">
+  <meta name="description" content="DiskNode is a diskless boot server for gaming cafes and esports labs. Keep your images, simplify your floor, and license for just PHP 50 per PC per year.">
+  <title>DiskNode — Keep Your Images. Gain the Speed.</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="DiskNode — Keep Your Images. Gain the Speed.">
+  <meta property="og:description" content="Diskless boot for gaming cafés and esports labs. PHP 50 per PC, per year, with dedicated support.">
+  <link rel="icon" type="image/png" href="LOGO/disknode-mark.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070b16;
+      --surface: #0c1424;
+      --surface-raised: #101b30;
+      --line: rgba(149, 179, 226, .15);
+      --text: #edf4ff;
+      --muted: #9cacc6;
+      --cyan: #31d9f2;
+      --blue: #438dff;
+      --green: #67e7a5;
+      --display: "Chakra Petch", "Segoe UI", sans-serif;
+      --body: "Manrope", "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 75% 8%, rgba(25, 99, 193, .13), transparent 34rem),
+        var(--bg);
+      color: var(--text);
+      font: 400 16px/1.65 var(--body);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
+    img { display: block; max-width: 100%; }
+    .container { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+    .display { font-family: var(--display); }
+    .eyebrow {
+      margin: 0;
+      color: var(--cyan);
+      font: 600 .75rem/1.4 var(--display);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+    .gradient-text {
+      color: var(--cyan);
+      background: linear-gradient(95deg, #42e1f1 5%, #5799ff 94%);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .site-header {
+      position: relative;
+      z-index: 2;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 11, 22, .76);
+      backdrop-filter: blur(16px);
+    }
+    .nav {
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: inline-flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+    .brand img { width: 42px; height: 42px; object-fit: contain; }
+    .brand-name { font: 700 1.45rem/1 var(--display); letter-spacing: -.03em; }
+    .brand-name span { color: var(--cyan); }
+    .nav-links { display: flex; align-items: center; gap: 30px; color: var(--muted); font-size: .88rem; font-weight: 600; }
+    .nav-links a:hover { color: var(--text); }
+
+    .button {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 20px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-size: .9rem;
+      font-weight: 800;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary {
+      color: #04111c;
+      background: linear-gradient(110deg, var(--cyan), #6aa9ff);
+      box-shadow: 0 8px 28px rgba(49, 217, 242, .16);
+    }
+    .button-secondary { border-color: var(--line); background: rgba(255,255,255,.025); }
+    .button-secondary:hover { border-color: rgba(49,217,242,.5); }
+    .button svg { width: 16px; height: 16px; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 92px 0 76px;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero::before {
+      position: absolute;
+      top: -270px;
+      right: -200px;
+      width: 760px;
+      height: 760px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(33, 146, 255, .16), rgba(22, 87, 181, .055) 42%, transparent 70%);
+      content: "";
+      pointer-events: none;
+    }
+    .hero-grid { position: relative; display: grid; grid-template-columns: 1.04fr .96fr; gap: 56px; align-items: center; }
+    .hero-copy { max-width: 630px; }
+    .status-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 12px;
+      border: 1px solid rgba(49,217,242,.2);
+      border-radius: 999px;
+      background: rgba(49,217,242,.055);
+      color: #c9f8ff;
+      font: 600 .73rem var(--display);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .status-label i { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px var(--green); }
+    h1 {
+      max-width: 690px;
+      margin: 24px 0 18px;
+      font: 700 clamp(3rem, 6vw, 5.35rem)/.99 var(--display);
+      letter-spacing: -.055em;
+    }
+    .hero-copy > p:not(.eyebrow) { max-width: 58ch; margin: 0; color: var(--muted); font-size: 1.08rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .quick-facts { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 30px; color: #c4d2e7; font-size: .8rem; font-weight: 700; }
+    .quick-facts span { display: inline-flex; align-items: center; gap: 8px; }
+    .check { color: var(--green); font-size: 1rem; }
+
+    .hero-art {
+      position: relative;
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+    .orbit {
+      position: absolute;
+      width: min(100%, 430px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(72, 152, 255, .16);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(28,110,214,.12), transparent 67%);
+      box-shadow: 0 0 90px rgba(34, 107, 223, .12), inset 0 0 80px rgba(34, 107, 223, .06);
+    }
+    .orbit::before, .orbit::after {
+      position: absolute;
+      inset: 9%;
+      border: 1px solid rgba(49,217,242,.12);
+      border-radius: 50%;
+      content: "";
+    }
+    .orbit::after { inset: 20%; border-color: rgba(72,152,255,.15); }
+    .orbit-dot { position: absolute; z-index: 1; width: 9px; height: 9px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 18px var(--cyan); }
+    .orbit-dot.one { top: 10%; left: 26%; }
+    .orbit-dot.two { top: 29%; right: 4%; }
+    .orbit-dot.three { bottom: 13%; left: 17%; }
+    .orbit-dot.four { right: 20%; bottom: 6%; width: 6px; height: 6px; background: var(--blue); }
+    .product-card {
+      position: relative;
+      z-index: 1;
+      width: min(330px, 82%);
+      padding: 30px;
+      border: 1px solid rgba(96, 165, 255, .32);
+      border-radius: 20px;
+      background: linear-gradient(145deg, rgba(16, 34, 65, .96), rgba(8, 15, 30, .98));
+      box-shadow: 0 30px 90px rgba(0,0,0,.4), 0 0 50px rgba(39,130,255,.12), inset 0 1px rgba(255,255,255,.08);
+      text-align: center;
+    }
+    .product-card::before {
+      position: absolute;
+      inset: 0 20% auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      content: "";
+    }
+    .product-card img { width: 142px; height: 142px; margin: 0 auto 18px; filter: drop-shadow(0 10px 30px rgba(28, 145, 255, .25)); }
+    .product-card .eyebrow { font-size: .65rem; }
+    .product-card h2 { margin: 7px 0 0; font: 700 1.8rem var(--display); }
+    .product-card p { margin: 6px 0 0; color: var(--muted); font-size: .82rem; }
+    .card-points { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+    .card-points span { padding: 5px 9px; border: 1px solid var(--line); border-radius: 5px; color: #d3def0; font-size: .67rem; font-weight: 700; }
+
+    .proof-bar { border-bottom: 1px solid var(--line); background: rgba(12,20,36,.76); }
+    .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .proof-item { padding: 22px 24px; text-align: center; }
+    .proof-item + .proof-item { border-left: 1px solid var(--line); }
+    .proof-item strong { display: block; font: 700 1.32rem var(--display); }
+    .proof-item span { display: block; margin-top: 2px; color: var(--muted); font-size: .76rem; }
+
+    section { padding: 88px 0; }
+    .section-heading { max-width: 670px; }
+    .section-heading h2 { margin: 11px 0 12px; font: 700 clamp(2rem,4vw,3rem)/1.08 var(--display); letter-spacing: -.035em; }
+    .section-heading > p:last-child { margin: 0; color: var(--muted); }
+    .problem-section { background: linear-gradient(180deg, rgba(12,20,36,.4), transparent); }
+    .benefit-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 34px; }
+    .benefit {
+      padding: 25px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(145deg, rgba(16,27,48,.8), rgba(12,20,36,.65));
+    }
+    .benefit .number { color: var(--cyan); font: 600 .74rem var(--display); letter-spacing: .16em; }
+    .benefit h3 { margin: 17px 0 8px; font: 600 1.24rem var(--display); }
+    .benefit p { margin: 0; color: var(--muted); font-size: .91rem; }
+
+    .compat-section { border-block: 1px solid var(--line); background: #0a1020; }
+    .compat-top { display: flex; justify-content: space-between; align-items: end; gap: 24px; }
+    .compat-note { max-width: 330px; padding: 13px 15px; border-left: 2px solid var(--cyan); background: rgba(49,217,242,.045); color: #c0cee3; font-size: .79rem; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 34px; }
+    .feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      min-height: 118px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(13,22,40,.8);
+    }
+    .feature-icon {
+      flex: 0 0 34px;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(49,217,242,.2);
+      border-radius: 8px;
+      background: rgba(49,217,242,.07);
+      color: var(--cyan);
+      font-size: .85rem;
+      font-weight: 800;
+    }
+    .feature h3 { margin: 1px 0 4px; font: 600 1rem var(--display); }
+    .feature p { margin: 0; color: var(--muted); font-size: .79rem; line-height: 1.55; }
+    .compat-callout {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 20px;
+      padding: 18px 22px;
+      border: 1px solid rgba(103,231,165,.18);
+      border-radius: 10px;
+      background: rgba(103,231,165,.045);
+    }
+    .compat-callout strong { font: 600 1.05rem var(--display); }
+    .game-tags { display: flex; flex-wrap: wrap; gap: 9px; }
+    .game-tags span { padding: 6px 11px; border: 1px solid rgba(103,231,165,.25); border-radius: 99px; color: #a4f5c7; font-size: .76rem; font-weight: 800; }
+
+    .workflow-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; margin-top: 34px; }
+    .workflow-step { padding-top: 18px; border-top: 1px solid var(--line); }
+    .workflow-step .step-number { color: var(--cyan); font: 700 1.2rem var(--display); }
+    .workflow-step h3 { margin: 10px 0 6px; font: 600 1.07rem var(--display); }
+    .workflow-step p { margin: 0; color: var(--muted); font-size: .83rem; }
+
+    .pricing-section { padding-top: 76px; background: linear-gradient(180deg, transparent, rgba(14,32,59,.36)); }
+    .pricing-layout { display: grid; grid-template-columns: 1fr .85fr; align-items: center; gap: 48px; }
+    .pricing-card {
+      position: relative;
+      overflow: hidden;
+      padding: 32px;
+      border: 1px solid rgba(49,217,242,.3);
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(16,33,59,.95), rgba(9,16,30,.98));
+      box-shadow: 0 18px 70px rgba(0,0,0,.22);
+    }
+    .pricing-card::after {
+      position: absolute;
+      top: -100px;
+      right: -90px;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: rgba(49,217,242,.1);
+      filter: blur(55px);
+      content: "";
+      pointer-events: none;
+    }
+    .price-label { margin: 0; color: #c6d4e9; font-size: .82rem; font-weight: 700; }
+    .price { display: flex; align-items: baseline; gap: 10px; margin: 3px 0 2px; }
+    .price strong { font: 700 clamp(3.2rem,6vw,4.4rem)/1.12 var(--display); letter-spacing: -.055em; }
+    .price span { color: var(--muted); font-size: .88rem; }
+    .price-detail { margin: 0; color: var(--muted); font-size: .83rem; }
+    .pricing-divider { height: 1px; margin: 22px 0; background: var(--line); }
+    .pricing-includes { display: grid; gap: 10px; margin: 0 0 24px; padding: 0; list-style: none; color: #d6e0ef; font-size: .85rem; }
+    .pricing-includes li { display: flex; gap: 10px; }
+    .pricing-card .button { width: 100%; }
+    .pricing-note { margin: 12px 0 0; color: var(--muted); font-size: .72rem; text-align: center; }
+    .price-aside h3 { margin: 0 0 12px; font: 600 1.45rem var(--display); }
+    .price-aside p { margin: 0; color: var(--muted); }
+    .price-aside .button { margin-top: 22px; }
+    .pricing-title { margin: 11px 0 12px; font: 700 clamp(2rem,4vw,3rem)/1.08 var(--display); letter-spacing: -.035em; }
+
+    .contact-section { padding: 0 0 88px; }
+    .contact-panel {
+      position: relative;
+      overflow: hidden;
+      padding: 46px;
+      border: 1px solid rgba(49,217,242,.22);
+      border-radius: 16px;
+      background:
+        radial-gradient(ellipse at 100% 0%, rgba(38,139,255,.17), transparent 50%),
+        linear-gradient(120deg, #0d1b32, #0b1120 72%);
+      text-align: center;
+    }
+    .contact-panel h2 { margin: 10px 0 8px; font: 700 clamp(2rem,4vw,2.7rem)/1.1 var(--display); }
+    .contact-panel > p:not(.eyebrow) { max-width: 590px; margin: 0 auto; color: var(--muted); }
+    .contact-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+
+    footer { border-top: 1px solid var(--line); color: var(--muted); font-size: .76rem; }
+    .footer-row { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .footer-brand { color: var(--text); font: 600 1rem var(--display); }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 18px; }
+    .footer-links a:hover { color: var(--cyan); }
+
+    @media (max-width: 900px) {
+      .hero-grid { gap: 20px; }
+      .hero-art { min-height: 350px; }
+      .orbit { width: min(100%, 350px); }
+      .feature-grid { grid-template-columns: repeat(2,1fr); }
+      .pricing-layout { gap: 28px; }
+    }
+    @media (max-width: 700px) {
+      .container { width: min(100% - 36px, 540px); }
+      .nav { min-height: 68px; flex-wrap: wrap; padding-block: 12px; }
+      .nav-links { order: 3; width: 100%; justify-content: center; gap: 24px; padding: 5px 0 2px; font-size: .8rem; }
+      .nav > .button { min-height: 42px; padding-inline: 14px; font-size: .78rem; }
+      .brand img { width: 36px; height: 36px; }
+      .brand-name { font-size: 1.28rem; }
+      .hero { padding: 62px 0 50px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-copy { text-align: center; margin-inline: auto; }
+      .hero-copy > p:not(.eyebrow) { margin-inline: auto; }
+      .hero-actions, .quick-facts { justify-content: center; }
+      h1 { font-size: clamp(3rem, 12vw, 4.5rem); }
+      .hero-art { min-height: 340px; margin-top: 4px; }
+      .proof-item { padding: 18px 8px; }
+      .proof-item strong { font-size: 1.05rem; }
+      .proof-item span { font-size: .67rem; }
+      section { padding: 64px 0; }
+      .benefit-grid { grid-template-columns: 1fr; }
+      .compat-top { align-items: flex-start; flex-direction: column; }
+      .compat-note { max-width: none; }
+      .workflow-grid { grid-template-columns: repeat(2,1fr); }
+      .pricing-layout { grid-template-columns: 1fr; }
+      .pricing-card { order: 2; }
+      .price-aside { order: 1; }
+      .contact-section { padding-bottom: 64px; }
+      .contact-panel { padding: 34px 22px; }
+    }
+    @media (max-width: 480px) {
+      .container { width: calc(100% - 30px); }
+      .nav-links { gap: 16px; }
+      .nav > .button { padding-inline: 11px; }
+      .hero-actions .button { width: 100%; }
+      .quick-facts { gap: 8px 14px; font-size: .73rem; }
+      .hero-art { min-height: 300px; }
+      .orbit { width: 290px; }
+      .product-card { width: 270px; padding: 24px; }
+      .product-card img { width: 116px; height: 116px; }
+      .proof-grid { grid-template-columns: 1fr; padding-block: 8px; }
+      .proof-item { padding: 12px; }
+      .proof-item + .proof-item { border-top: 1px solid var(--line); border-left: 0; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .feature { min-height: 0; }
+      .compat-callout { align-items: flex-start; flex-direction: column; gap: 12px; }
+      .workflow-grid { grid-template-columns: 1fr 1fr; gap: 18px 13px; }
+      .pricing-card { padding: 24px 20px; }
+      .footer-row { padding-block: 18px; align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#" aria-label="DiskNode home">
+        <img src="LOGO/disknode-mark.png" alt="">
+        <span class="brand-name">Disk<span>Node</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#platform">Platform</a>
+        <a href="#compatibility">Compatibility</a>
+        <a href="#pricing">Pricing</a>
+      </nav>
+      <a class="button button-primary" href="https://www.facebook.com/profile.php?id=61594081804915" target="_blank" rel="noopener noreferrer">
+        Contact us
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="status-label"><i aria-hidden="true"></i> Diskless boot for gaming cafés</div>
+          <h1>Keep your images.<br><span class="gradient-text">Gain the speed.</span></h1>
+          <p>One diskless boot engine for your entire floor. Bring your existing images, streamline PC management, and keep players ready for game day.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://www.facebook.com/profile.php?id=61594081804915" target="_blank" rel="noopener noreferrer">
+              Talk to our team
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="button button-secondary" href="#pricing">View annual pricing</a>
+          </div>
+          <div class="quick-facts" aria-label="Platform highlights">
+            <span><b class="check" aria-hidden="true">✓</b> Keep existing images</span>
+            <span><b class="check" aria-hidden="true">✓</b> Built-in updater</span>
+            <span><b class="check" aria-hidden="true">✓</b> Dedicated support</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-label="DiskNode platform">
+          <div class="orbit" aria-hidden="true">
+            <i class="orbit-dot one"></i><i class="orbit-dot two"></i>
+            <i class="orbit-dot three"></i><i class="orbit-dot four"></i>
+          </div>
+          <div class="product-card">
+            <img src="LOGO/disknode-mark.png" alt="DiskNode network and power symbol">
+            <p class="eyebrow">One engine. Your whole floor.</p>
+            <h2>DiskNode</h2>
+            <p>Diskless boot, made for gaming.</p>
+            <div class="card-points"><span>CCBoot</span><span>iPXE</span><span>VHD / VHDX</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="proof-bar" aria-label="DiskNode highlights">
+      <div class="container proof-grid">
+        <div class="proof-item"><strong>PHP 50</strong><span>per PC, per year</span></div>
+        <div class="proof-item"><strong>One master image</strong><span>consistent PCs across your floor</span></div>
+        <div class="proof-item"><strong>50+ PC floors</strong><span>built for busy boot times</span></div>
+      </div>
+    </div>
+
+    <section class="problem-section" id="platform">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Why DiskNode</p>
+          <h2 class="display">Compatibility you know.<br><span class="gradient-text">Performance you need.</span></h2>
+          <p>Upgrade your diskless setup without starting from scratch. DiskNode brings familiar images and a modern, RAM-first engine together in one platform.</p>
+        </div>
+        <div class="benefit-grid">
+          <article class="benefit">
+            <span class="number">01 / MIGRATE</span>
+            <h3>Bring your images along</h3>
+            <p>Boot existing CCBoot db.xml, iPXE, and VHD/VHDX images. Keep the workflow you know and minimize image rebuilding and downtime.</p>
+          </article>
+          <article class="benefit">
+            <span class="number">02 / RESPOND</span>
+            <h3>Write back to RAM first</h3>
+            <p>Client writes hit server memory first, helping reduce storage bottlenecks and keep busy sessions responsive.</p>
+          </article>
+          <article class="benefit">
+            <span class="number">03 / SCALE</span>
+            <h3>Keep boot storms moving</h3>
+            <p>RAM and SSD caching, read coalescing, and staggered power-on help keep floor-wide booting smooth when the café fills up.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="compat-section" id="compatibility">
+      <div class="container">
+        <div class="compat-top">
+          <div class="section-heading">
+            <p class="eyebrow">Gaming-ready platform</p>
+            <h2 class="display">The essentials, built in.</h2>
+            <p>Server-side tools and compatibility features to help you run, update, and support your PC floor.</p>
+          </div>
+          <div class="compat-note">Designed for diskless gaming environments with security features available natively.</div>
+        </div>
+        <div class="feature-grid">
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true">SB</span>
+            <div><h3>Native Secure Boot</h3><p>Secure Boot support without an added compatibility layer.</p></div>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true">HV</span>
+            <div><h3>Native HVCI</h3><p>Supports Hypervisor-protected Code Integrity.</p></div>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true">TP</span>
+            <div><h3>Native TPM</h3><p>Native Trusted Platform Module support.</p></div>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true">IO</span>
+            <div><h3>IOMMU</h3><p>IOMMU support for compatible PC configurations.</p></div>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true">OPT</span>
+            <div><h3>Server-side optimizations</h3><p>Built-in optimizations run on the server—no Super Client session needed.</p></div>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true">↻</span>
+            <div><h3>Built-in updater</h3><p>Keep DiskNode up to date from the platform.</p></div>
+          </article>
+        </div>
+        <div class="compat-callout">
+          <strong>Ready for popular competitive games</strong>
+          <div class="game-tags"><span>VALORANT restrictions supported</span><span>Warzone supported</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">A simpler way to run the floor</p>
+          <h2 class="display">From one image to every PC.</h2>
+          <p>Manage your diskless environment with a straightforward setup built around the way gaming cafés work.</p>
+        </div>
+        <div class="workflow-grid">
+          <article class="workflow-step"><span class="step-number">01</span><h3>Prepare your image</h3><p>Start from a master Windows image with the drivers and games your floor needs.</p></article>
+          <article class="workflow-step"><span class="step-number">02</span><h3>Boot over the network</h3><p>Connect compatible PCs and start them from your DiskNode server.</p></article>
+          <article class="workflow-step"><span class="step-number">03</span><h3>Serve the whole floor</h3><p>Keep client PCs consistent with centralized diskless image management.</p></article>
+          <article class="workflow-step"><span class="step-number">04</span><h3>Get dedicated support</h3><p>Work with our support team to plan and run your diskless setup.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="pricing-section" id="pricing">
+      <div class="container pricing-layout">
+        <div class="price-aside">
+          <p class="eyebrow">Straightforward annual licensing</p>
+          <h2 class="pricing-title">Simple pricing.<br>More time for your players.</h2>
+          <p>License DiskNode by PC with one clear yearly rate. Talk with our team about your setup, deployment, and support needs.</p>
+          <a class="button button-secondary" href="https://www.facebook.com/profile.php?id=61594081804915" target="_blank" rel="noopener noreferrer">Ask about your setup</a>
+        </div>
+        <div class="pricing-card">
+          <p class="price-label">DiskNode annual license</p>
+          <div class="price"><strong>₱50</strong><span>/ PC / year</span></div>
+          <p class="price-detail">PHP 50 per PC, per year</p>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-includes">
+            <li><span class="check" aria-hidden="true">✓</span> Diskless boot platform</li>
+            <li><span class="check" aria-hidden="true">✓</span> Built-in server-side optimizations</li>
+            <li><span class="check" aria-hidden="true">✓</span> Built-in updater</li>
+            <li><span class="check" aria-hidden="true">✓</span> Dedicated support team</li>
+          </ul>
+          <a class="button button-primary" href="https://www.facebook.com/profile.php?id=61594081804915" target="_blank" rel="noopener noreferrer">Contact us for licensing</a>
+          <p class="pricing-note">Annual license price per PC. Contact us for setup and support details.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+      <div class="container">
+        <div class="contact-panel">
+          <p class="eyebrow">Diskless setup, with dedicated support</p>
+          <h2 class="display">Let’s get your floor ready.</h2>
+          <p>We offer diskless setups with a dedicated support team. Reach out to discuss your gaming café, esports lab, or multi-PC environment.</p>
+          <div class="contact-actions">
+            <a class="button button-primary" href="https://www.facebook.com/profile.php?id=61594081804915" target="_blank" rel="noopener noreferrer">
+              Contact Lumetri
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="button button-secondary" href="https://www.facebook.com/search/top?q=diskless%20pinas" target="_blank" rel="noopener noreferrer">Join the Facebook group</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <span class="footer-brand">DiskNode <span class="gradient-text">by Lumetri</span></span>
+      <span>Diskless boot for gaming cafés and esports labs.</span>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="https://www.facebook.com/profile.php?id=61594081804915" target="_blank" rel="noopener noreferrer">Contact us</a>
+        <a href="https://www.facebook.com/search/top?q=diskless%20pinas" target="_blank" rel="noopener noreferrer">Facebook group</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
